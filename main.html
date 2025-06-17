@@ -1,58 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meditation App</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Meditation Timer</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-    <div class="app">
-        <div class="vid-container">
-            <video id="background-video" autoplay loop muted>
-                <source src="https://assets.mixkit.co/videos/preview/mixkit-waves-coming-to-the-beach-5016-large.mp4" type="video/mp4">
-            </video>
-        </div>
-        
-        <div class="player-container">
-            <div class="header">
-                <h1>Mindful Meditation</h1>
-                <p>Find your inner peace with guided meditation</p>
-            </div>
-            
-            <div class="sound-picker">
-                <button class="sound-btn active" data-sound="beach">
-                    <i>🏖️</i>
-                    <span>Beach</span>
-                </button>
-                <button class="sound-btn" data-sound="rain">
-                    <i>🌧️</i>
-                    <span>Rain</span>
-                </button>
-            </div>
-            
-            <div class="time-select">
-                <button class="time-btn smaller-mins">2 Minutes</button>
-                <button class="time-btn medium-mins">5 Minutes</button>
-                <button class="time-btn long-mins active">10 Minutes</button>
-            </div>
-            
-            <div class="time-display">10:0</div>
-            
-            <div class="play">
-                <button class="play-btn">
-                    <i>▶️</i>
-                </button>
-            </div>
-            
-            <!-- Audio elements -->
-            <audio id="beach-audio" src="https://assets.mixkit.co/sfx/preview/mixkit-ocean-waves-ambient-1208.mp3" loop preload="auto"></audio>
-            <audio id="rain-audio" src="https://assets.mixkit.co/sfx/preview/mixkit-rain-ambience-1243.mp3" loop preload="auto"></audio>
-        </div>
-        
-        <div class="footer">
-            Meditation App | Find Your Peace
-        </div>
+  <div class="app">
+    <div class="vid-container">
+      <video autoplay loop muted>
+        <source src="video.mp4" type="video/mp4" />
+      </video>
     </div>
-    <script src="script.js"></script>
+
+    <div class="player-container">
+      <audio class="beach-audio" src="beach.mp3"></audio>
+      <audio class="rain-audio" src="rain.mp3"></audio>
+
+      <div class="time-display">10:0</div>
+      <button class="play">▶️</button>
+
+      <div class="time-select">
+        <button class="smaller-mins" data-time="120">2 Min</button>
+        <button class="medium-mins" data-time="300">5 Min</button>
+        <button class="long-mins" data-time="600">10 Min</button>
+      </div>
+
+      <div class="sound-picker">
+        <button data-sound="beach">Beach</button>
+        <button data-sound="rain">Rain</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>

@@ -1,150 +1,97 @@
-document.addEventListener('DOMContentLoaded', function() {
-            // Elements
-            const soundButtons = document.querySelectorAll('.sound-btn');
-            const timeButtons = document.querySelectorAll('.time-btn');
-            const timeDisplay = document.querySelector('.time-display');
-            const playButton = document.querySelector('.play-btn');
-            const playIcon = playButton.querySelector('i');
-            const videoElement = document.getElementById('background-video');
-            
-            // Audio elements
-            const beachAudio = document.getElementById('beach-audio');
-            const rainAudio = document.getElementById('rain-audio');
-            
-            // Current state
-            let currentSound = 'beach';
-            let selectedTime = 10 * 60; // 10 minutes in seconds
-            let timer = null;
-            let isPlaying = false;
-            let remainingTime = selectedTime;
-            
-            // Set audio volume
-            beachAudio.volume = 0.5;
-            rainAudio.volume = 0.5;
-            
-            // Sound selection
-            soundButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    // Update UI
-                    soundButtons.forEach(btn => btn.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    // Change sound
-                    currentSound = this.dataset.sound;
-                    
-                    // Change video
-                    if (currentSound === 'beach') {
-                        videoElement.src = 'https://assets.mixkit.co/videos/preview/mixkit-waves-coming-to-the-beach-5016-large.mp4';
-                    } else {
-                        videoElement.src = 'https://assets.mixkit.co/videos/preview/mixkit-rain-falling-on-a-window-4394-large.mp4';
-                    }
-                    
-                    // Update audio if playing
-                    if (isPlaying) {
-                        if (currentSound === 'beach') {
-                            beachAudio.play();
-                            rainAudio.pause();
-                        } else {
-                            rainAudio.play();
-                            beachAudio.pause();
-                        }
-                    }
-                });
-            });
-            
-            // Time selection
-            timeButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    // Update UI
-                    timeButtons.forEach(btn => btn.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    // Get time in minutes
-                    let minutes;
-                    if (this.classList.contains('smaller-mins')) {
-                        minutes = 2;
-                    } else if (this.classList.contains('medium-mins')) {
-                        minutes = 5;
-                    } else {
-                        minutes = 10;
-                    }
-                    
-                    selectedTime = minutes * 60;
-                    remainingTime = selectedTime;
-                    
-                    // Update display
-                    updateTimeDisplay();
-                });
-            });
-            
-            // Play/Pause button
-            playButton.addEventListener('click', function() {
-                if (isPlaying) {
-                    // Pause meditation
-                    pauseMeditation();
-                } else {
-                    // Start meditation
-                    startMeditation();
-                }
-            });
-            
-            // Start meditation
-            function startMeditation() {
-                isPlaying = true;
-                playIcon.textContent = '⏸️';
-                
-                // Play sound
-                if (currentSound === 'beach') {
-                    beachAudio.play()
-                        .catch(e => console.log("Beach audio play error:", e));
-                } else {
-                    rainAudio.play()
-                        .catch(e => console.log("Rain audio play error:", e));
-                }
-                
-                // Start timer immediately
-                updateTimer();
-                
-                // Continue with interval
-                timer = setInterval(updateTimer, 1000);
-            }
-            
-            // Update timer function
-            function updateTimer() {
-                remainingTime--;
-                updateTimeDisplay();
-                
-                // Check if time is up
-                if (remainingTime <= 0) {
-                    clearInterval(timer);
-                    isPlaying = false;
-                    playIcon.textContent = '▶️';
-                    beachAudio.pause();
-                    rainAudio.pause();
-                    remainingTime = selectedTime;
-                    updateTimeDisplay();
-                    alert('Meditation session completed!');
-                }
-            }
-            
-            // Pause meditation
-            function pauseMeditation() {
-                isPlaying = false;
-                playIcon.textContent = '▶️';
-                
-                // Pause sound
-                beachAudio.pause();
-                rainAudio.pause();
-                
-                // Pause timer
-                clearInterval(timer);
-            }
-            
-            // Update time display
-            function updateTimeDisplay() {
-                const minutes = Math.floor(remainingTime / 60);
-                const seconds = remainingTime % 60;
-                // Display seconds without leading zero as required by tests
-                timeDisplay.textContent = `${minutes}:${seconds}`;
-            }
-        });
+const timeButtons = document.querySelectorAll('.time-select button');
+const playButton = document.querySelector('.play');
+const beachAudio = document.querySelector('.beach-audio');
+const rainAudio = document.querySelector('.rain-audio');
+const soundPicker = document.querySelectorAll('.sound-picker button');
+const timeDisplay = document.querySelector('.time-display');
+
+let selectedTime = 600; // default 10 mins
+let remainingTime = selectedTime;
+let timer;
+let isPlaying = false;
+let currentSound = 'beach';
+
+function updateTimeDisplay() {
+  const minutes = Math.floor(remainingTime / 60);
+  const seconds = remainingTime % 60;
+  timeDisplay.textContent = `${minutes}:${seconds}`;
+}
+
+function updateTimer() {
+  if (remainingTime <= 0) {
+    clearInterval(timer);
+    isPlaying = false;
+    playButton.textContent = '▶️';
+    beachAudio.pause();
+    rainAudio.pause();
+    remainingTime = selectedTime;
+    updateTimeDisplay();
+    alert('Meditation session completed!');
+    return;
+  }
+
+  remainingTime--;
+  updateTimeDisplay();
+}
+
+function startMeditation() {
+  isPlaying = true;
+  playButton.textContent = '⏸️';
+
+  const sound = currentSound === 'beach' ? beachAudio : rainAudio;
+  sound.currentTime = 0;
+  const playPromise = sound.play();
+
+  if (playPromise !== undefined) {
+    playPromise
+      .then(() => {
+        timer = setInterval(updateTimer, 1000);
+      })
+      .catch((e) => {
+        console.error("Audio playback failed:", e);
+      });
+  }
+
+  updateTimeDisplay();
+}
+
+function pauseMeditation() {
+  isPlaying = false;
+  playButton.textContent = '▶️';
+  clearInterval(timer);
+  beachAudio.pause();
+  rainAudio.pause();
+}
+
+playButton.addEventListener('click', () => {
+  if (!isPlaying) {
+    startMeditation();
+  } else {
+    pauseMeditation();
+  }
+});
+
+timeButtons.forEach(button => {
+  button.addEventListener('click', () => {
+    selectedTime = parseInt(button.getAttribute('data-time'));
+    remainingTime = selectedTime;
+    updateTimeDisplay();
+
+    if (isPlaying) {
+      pauseMeditation();
+    }
+  });
+});
+
+soundPicker.forEach(button => {
+  button.addEventListener('click', () => {
+    currentSound = button.getAttribute('data-sound');
+    if (isPlaying) {
+      pauseMeditation();
+      startMeditation();
+    }
+  });
+});
+
+// Initial display
+updateTimeDisplay();
