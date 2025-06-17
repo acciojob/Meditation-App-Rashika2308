@@ -1,4 +1,4 @@
- * {
+* {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -141,15 +141,15 @@
             transform: scale(1.05);
         }
 
-        #smaller-mins {
+        .smaller-mins {
             background: rgba(65, 105, 225, 0.5);
         }
 
-        #medium-mins {
+        .medium-mins {
             background: rgba(46, 139, 87, 0.5);
         }
 
-        #long-mins {
+        .long-mins {
             background: rgba(178, 34, 34, 0.5);
         }
 

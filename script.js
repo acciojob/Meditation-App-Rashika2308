@@ -1,4 +1,4 @@
-        document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() {
             // Elements
             const soundButtons = document.querySelectorAll('.sound-btn');
             const timeButtons = document.querySelectorAll('.time-btn');
@@ -17,6 +17,10 @@
             let timer = null;
             let isPlaying = false;
             let remainingTime = selectedTime;
+            
+            // Set audio volume
+            beachAudio.volume = 0.5;
+            rainAudio.volume = 0.5;
             
             // Sound selection
             soundButtons.forEach(button => {
@@ -57,9 +61,9 @@
                     
                     // Get time in minutes
                     let minutes;
-                    if (this.id === 'smaller-mins') {
+                    if (this.classList.contains('smaller-mins')) {
                         minutes = 2;
-                    } else if (this.id === 'medium-mins') {
+                    } else if (this.classList.contains('medium-mins')) {
                         minutes = 5;
                     } else {
                         minutes = 10;
@@ -91,28 +95,36 @@
                 
                 // Play sound
                 if (currentSound === 'beach') {
-                    beachAudio.play().catch(e => console.log("Audio play error:", e));
+                    beachAudio.play()
+                        .catch(e => console.log("Beach audio play error:", e));
                 } else {
-                    rainAudio.play().catch(e => console.log("Audio play error:", e));
+                    rainAudio.play()
+                        .catch(e => console.log("Rain audio play error:", e));
                 }
                 
-                // Start timer
-                timer = setInterval(() => {
-                    remainingTime--;
+                // Start timer immediately
+                updateTimer();
+                
+                // Continue with interval
+                timer = setInterval(updateTimer, 1000);
+            }
+            
+            // Update timer function
+            function updateTimer() {
+                remainingTime--;
+                updateTimeDisplay();
+                
+                // Check if time is up
+                if (remainingTime <= 0) {
+                    clearInterval(timer);
+                    isPlaying = false;
+                    playIcon.textContent = '▶️';
+                    beachAudio.pause();
+                    rainAudio.pause();
+                    remainingTime = selectedTime;
                     updateTimeDisplay();
-                    
-                    // Check if time is up
-                    if (remainingTime <= 0) {
-                        clearInterval(timer);
-                        isPlaying = false;
-                        playIcon.textContent = '▶️';
-                        beachAudio.pause();
-                        rainAudio.pause();
-                        remainingTime = selectedTime;
-                        updateTimeDisplay();
-                        alert('Meditation session completed!');
-                    }
-                }, 1000);
+                    alert('Meditation session completed!');
+                }
             }
             
             // Pause meditation
