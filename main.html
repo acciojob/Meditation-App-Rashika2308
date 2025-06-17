@@ -1,55 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Meditation App</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meditation App</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div id="app">
-    <div class="vid-container">
-      <video id="background-video" autoplay loop muted>
-        <source src="" type="video/mp4" />
-      </video>
+    <div class="app">
+        <div class="vid-container">
+            <video id="background-video" autoplay loop muted>
+                <!-- Video source will be set by JavaScript -->
+            </video>
+        </div>
+        
+        <div class="player-container">
+            <div class="header">
+                <h1>Mindful Meditation</h1>
+                <p>Find your inner peace with guided meditation</p>
+            </div>
+            
+            <div class="sound-picker">
+                <button class="sound-btn active" data-sound="beach">
+                    <i class="beach-icon">🏖️</i>
+                    <span>Beach</span>
+                </button>
+                <button class="sound-btn" data-sound="rain">
+                    <i class="rain-icon">🌧️</i>
+                    <span>Rain</span>
+                </button>
+            </div>
+            
+            <div class="time-select">
+                <button id="smaller-mins" class="time-btn smaller-mins">2 Minutes</button>
+                <button id="medium-mins" class="time-btn medium-mins">5 Minutes</button>
+                <button id="long-mins" class="time-btn long-mins active">10 Minutes</button>
+            </div>
+            
+            <div class="time-display">10:0</div>
+            
+            <div class="play">
+                <button class="play-btn">
+                    <i class="play-icon">▶️</i>
+                </button>
+            </div>
+        </div>
+        
+        <div class="footer">
+            Meditation App | Find Your Peace
+        </div>
+        
+        <!-- Audio elements -->
+        <audio id="beach-audio" loop preload="auto"></audio>
+        <audio id="rain-audio" loop preload="auto"></audio>
     </div>
 
-    <div class="player-container">
-      <div class="header">
-        <h1>Mindful Meditation</h1>
-        <p>Find your inner peace with guided meditation</p>
-      </div>
-
-      <div class="sound-picker">
-        <button class="sound-btn active" data-sound="beach">
-          <i class="fas fa-umbrella-beach"></i>
-          <span>Beach</span>
-        </button>
-        <button class="sound-btn" data-sound="rain">
-          <i class="fas fa-cloud-rain"></i>
-          <span>Rain</span>
-        </button>
-      </div>
-
-      <div id="time-select" class="time-select">
-        <button id="smaller-mins" class="time-btn">2 Minutes</button>
-        <button id="medium-mins" class="time-btn">5 Minutes</button>
-        <button id="long-mins" class="time-btn active">10 Minutes</button>
-      </div>
-
-      <div class="time-display">10:00</div>
-
-      <div class="play">
-        <button class="play-btn">
-          <i class="fas fa-play"></i>
-        </button>
-      </div>
-    </div>
-
-    <div class="footer">Meditation App | Find Your Peace</div>
-  </div>
-
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
