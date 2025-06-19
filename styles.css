@@ -1,61 +1,89 @@
-body {
+* {
   margin: 0;
-  font-family: sans-serif;
-  background-color: #111;
-  color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.app {
-  text-align: center;
-  max-width: 400px;
-  padding: 20px;
-  background: #222;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+body, html {
+  height: 100%;
+  font-family: Arial, sans-serif;
+}
+
+#app {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.vid-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
 }
 
 .vid-container video {
   width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.player-container {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  background-color: rgba(0,0,0,0.3);
+}
+
+#time-select {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+#time-select button {
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  background-color: rgba(255,255,255,0.3);
+  color: white;
   border-radius: 10px;
-  margin-bottom: 20px;
+  cursor: pointer;
 }
 
 .time-display {
   font-size: 48px;
-  margin: 10px 0;
+  margin: 20px 0;
 }
 
-.play {
-  font-size: 24px;
-  padding: 10px 20px;
-  margin-bottom: 20px;
-  cursor: pointer;
-  background: #444;
-  color: white;
-  border: none;
-  border-radius: 8px;
-}
-
-.time-select, .sound-picker {
-  margin-top: 10px;
-}
-
-.time-select button, .sound-picker button {
-  padding: 10px;
-  margin: 5px;
-  background: #333;
-  color: white;
-  border: none;
-  border-radius: 6px;
+.play img {
+  width: 60px;
+  height: 60px;
   cursor: pointer;
 }
 
-.time-select button:hover,
-.sound-picker button:hover,
-.play:hover {
-  background: #555;
+.sound-picker {
+  position: absolute;
+  right: 30px;
+  top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.sound-picker button {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  font-size: 20px;
+  border: none;
+  background-color: rgba(255,255,255,0.4);
+  cursor: pointer;
 }
