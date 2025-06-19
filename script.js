@@ -1,83 +1,91 @@
-const playBtn = document.getElementById('play-icon');
-const beachAudio = document.getElementById('beach');
-const rainAudio = document.getElementById('rain');
-const video = document.getElementById('bg-video');
-const timeDisplay = document.querySelector('.time-display');
+window.addEventListener('DOMContentLoaded', () => {
+  const playBtn = document.querySelector('.play');
+  const timeDisplay = document.querySelector('.time-display');
+  const soundButtons = document.querySelectorAll('.sound-btn');
+  const video = document.getElementById('background-video');
+  const beachAudio = document.getElementById('beach-audio');
+  const rainAudio = document.getElementById('rain-audio');
 
-const timeButtons = {
-  'smaller-mins': 2,
-  'medium-mins': 5,
-  'long-mins': 10,
-};
+  const timeButtons = {
+    'smaller-mins': 2 * 60,
+    'medium-mins': 5 * 60,
+    'long-mins': 10 * 60,
+  };
 
-let currentAudio = beachAudio;
-let duration = 600;
-let countdown;
-let isPlaying = false;
+  let currentSound = 'beach';
+  let duration = 600;
+  let currentTime = duration;
+  let timer;
+  let isPlaying = false;
 
-// Time select logic
-for (let id in timeButtons) {
-  document.getElementById(id).addEventListener('click', () => {
-    duration = timeButtons[id] * 60;
-    timeDisplay.textContent = `${timeButtons[id]}:0`;
-    stopAll();
+  updateDisplay(currentTime);
+
+  // Time selection
+  Object.keys(timeButtons).forEach(id => {
+    document.getElementById(id).addEventListener('click', () => {
+      duration = timeButtons[id];
+      currentTime = duration;
+      updateDisplay(currentTime);
+    });
   });
-}
 
-// Play/Pause logic
-playBtn.addEventListener('click', () => {
-  if (!isPlaying) {
-    playMeditation();
-  } else {
-    pauseMeditation();
-  }
-});
+  // Sound selection
+  soundButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      soundButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentSound = btn.id;
+      switchVideoAndAudio();
+    });
+  });
 
-function playMeditation() {
-  isPlaying = true;
-  currentAudio.play();
-  playBtn.src = 'https://img.icons8.com/ios-filled/50/pause--v1.png';
-
-  let time = duration;
-  countdown = setInterval(() => {
-    let min = Math.floor(time / 60);
-    let sec = time % 60;
-    timeDisplay.textContent = `${min}:${sec}`;
-    time--;
-
-    if (time < 0) {
-      clearInterval(countdown);
-      stopAll();
+  function switchVideoAndAudio() {
+    if (currentSound === 'beach') {
+      video.src = 'Sounds/beach.mp4';
+      beachAudio.play();
+      rainAudio.pause();
+    } else {
+      video.src = 'Sounds/rain.mp4';
+      rainAudio.play();
+      beachAudio.pause();
     }
-  }, 1000);
-}
+  }
 
-function pauseMeditation() {
-  isPlaying = false;
-  currentAudio.pause();
-  playBtn.src = 'https://img.icons8.com/ios-filled/50/play--v1.png';
-  clearInterval(countdown);
-}
+  playBtn.addEventListener('click', () => {
+    if (isPlaying) {
+      pauseMeditation();
+    } else {
+      startMeditation();
+    }
+  });
 
-function stopAll() {
-  pauseMeditation();
-  beachAudio.pause();
-  beachAudio.currentTime = 0;
-  rainAudio.pause();
-  rainAudio.currentTime = 0;
-}
+  function startMeditation() {
+    isPlaying = true;
+    playBtn.textContent = '⏸️';
+    switchVideoAndAudio();
+    timer = setInterval(() => {
+      currentTime--;
+      updateDisplay(currentTime);
 
-// Sound picker logic
-document.getElementById('beach-sound').addEventListener('click', () => {
-  currentAudio.pause();
-  currentAudio = beachAudio;
-  video.src = 'Sounds/beach.mp4';
-  if (isPlaying) currentAudio.play();
-});
+      if (currentTime <= 0) {
+        pauseMeditation();
+        currentTime = duration;
+        updateDisplay(currentTime);
+      }
+    }, 1000);
+  }
 
-document.getElementById('rain-sound').addEventListener('click', () => {
-  currentAudio.pause();
-  currentAudio = rainAudio;
-  video.src = 'Sounds/rain.mp4';
-  if (isPlaying) currentAudio.play();
+  function pauseMeditation() {
+    isPlaying = false;
+    playBtn.textContent = '▶️';
+    clearInterval(timer);
+    beachAudio.pause();
+    rainAudio.pause();
+  }
+
+  function updateDisplay(time) {
+    const mins = Math.floor(time / 60);
+    const secs = time % 60;
+    timeDisplay.textContent = `${mins}:${secs}`;
+  }
 });

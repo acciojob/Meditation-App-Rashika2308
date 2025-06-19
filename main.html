@@ -4,36 +4,33 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Meditation App</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div id="app">
+  <div class="app">
     <div class="vid-container">
-      <video id="bg-video" autoplay muted loop>
+      <video id="background-video" autoplay loop muted>
         <source src="Sounds/beach.mp4" type="video/mp4" />
       </video>
     </div>
 
     <div class="player-container">
+      <div class="sound-picker">
+        <button id="beach" class="sound-btn active">🌊</button>
+        <button id="rain" class="sound-btn">🌧️</button>
+      </div>
+
       <div id="time-select">
         <button id="smaller-mins">2 Minutes</button>
         <button id="medium-mins">5 Minutes</button>
         <button id="long-mins">10 Minutes</button>
       </div>
 
-      <div class="play">
-        <img src="https://img.icons8.com/ios-filled/50/play--v1.png" id="play-icon" />
-      </div>
-
       <div class="time-display">10:0</div>
+      <button class="play">▶️</button>
 
-      <div class="sound-picker">
-        <button id="beach-sound">🌊</button>
-        <button id="rain-sound">🌧️</button>
-      </div>
-
-      <audio id="beach" src="Sounds/beach.mp3"></audio>
-      <audio id="rain" src="Sounds/rain.mp3"></audio>
+      <audio id="beach-audio" src="Sounds/beach.mp3" loop></audio>
+      <audio id="rain-audio" src="Sounds/rain.mp3" loop></audio>
     </div>
   </div>
 
